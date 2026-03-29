@@ -20,15 +20,37 @@ class ProductController extends Controller
         ]);
     }
 
-    // 1. Xem danh sách
-    public function index()
-    {
-        $products = Product::with('category')->paginate(10);
+    //Xem danh sách
+   public function index(Request $request)
+{
+    $query = Product::with('category');
 
-        return view('products.index', compact('products'));
+    //tìm theo tên
+    if ($request->name) {
+        $query->where('name', 'like', '%' . $request->name . '%');
     }
 
-    
+    //lọc theo category
+    if ($request->category_id) {
+        $query->where('category_id', $request->category_id);
+    }
+
+    //sắp xếp giá
+    if ($request->sort == 'asc') {
+        $query->orderBy('price', 'asc');
+    } elseif ($request->sort == 'desc') {
+        $query->orderBy('price', 'desc');
+    }
+
+    $products = $query->paginate(10);
+
+    // lấy category cho dropdown
+    $categories = Category::all();
+
+    return view('products.index', compact('products', 'categories'));
+}
+
+
     // 2. Hiển thị form thêm
     public function create()
     {

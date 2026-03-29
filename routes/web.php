@@ -18,7 +18,9 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // --- PHẦN QUẢN LÝ USER (CRUD) ---
 
-Route::middleware('auth')->resource('users', UserController::class);
+//Route::middleware('auth')->resource('users', UserController::class);
 
-Route::middleware('auth')->resource('products', ProductController::class);
+//Route::middleware('auth')->resource('products', ProductController::class);
+
+Route::resource('/products', ProductController::class);
 
